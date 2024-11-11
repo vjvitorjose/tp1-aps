@@ -1,7 +1,34 @@
 class Time:
     
     def __init__(self, nome, jogadores, tecnico, casa):
-        self.nome = nome
-        self.jogadores = jogadores
-        self.tecnico = tecnico
-        self.casa = casa
+        self.__nome = nome
+        self.__jogadores = jogadores
+        self.__tecnico = tecnico
+        self.__casa = casa
+        
+    def getNome(self):
+        return self.__nome
+    
+    def setNome(self, nome):
+        self.__nome = nome
+        
+    def getJogadores(self):
+        return self.__jogadores
+    
+    def addJogador(self, jogador):
+        self.__jogadores.append(jogador)
+        
+    def removeJogador(self, jogador):
+        self.__jogadores.remove(jogador)
+        
+    def getTecnico(self):
+        return self.__tecnico
+    
+    def setTecnico(self, tecnico):
+        self.__tecnico = tecnico
+        
+    def getCasa(self):
+        return self.__casa
+    
+    def setCasa(self, casa):
+        self.__casa = casa
