@@ -27,6 +27,7 @@ class TelaCampeonato:
 
         self.login_usuario = tk.Label(root, text=f"Nome: {self.nome_usuario}\nTime: {self.time_usuario}", font=("Times New Roman", 20))
         self.login_usuario.pack(pady=20) 
+        
         self.menu_frame = tk.Frame(root, bg="black") 
         self.menu_frame.pack()
 
@@ -59,10 +60,10 @@ class TelaCampeonato:
             widget.destroy()
 
     def classificacao(self):
-        messagebox.showinfo("Tabela de Classificação 2024", "Aqui estará a tabela de classificação.")
+        messagebox.showinfo("Tabela de Classificação 2024")
 
     def cadastrar_time(self):
-        messagebox.showinfo("Cadastrar Time", "Aqui você pode cadastrar um time.")
+        messagebox.showinfo("Cadastrar Time")
 
     def gravar_resultado(self):
-        messagebox.showinfo("Gravar Resultado", "Aqui você pode gravar o resultado de uma partida.")
+        messagebox.showinfo("Gravar Resultado")
