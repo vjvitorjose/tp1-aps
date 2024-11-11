@@ -5,9 +5,21 @@ class Jogador:
         self.__numero = numero
         self.__posicao = posicao
     
-    def exibir_info(self):
-        info = (
-            f"Nome: {self.__nome}\n"
-            f"Numero: {self.__numero}\n"
-            f"Posição: {self.__posicao}\n"
-        )
+    def getNome(self):
+        return self.__nome
+    
+    def setNome(self, nome):
+        self.__nome = nome
+    
+    def getNumero(self):
+        return self.__numero
+    
+    def setNumero(self, numero):
+        self.__numero = numero
+    
+    def getPosicao(self):
+        return self.__posicao
+    
+    def setPosicao(self, posicao):
+        self.__posicao = posicao
+    
