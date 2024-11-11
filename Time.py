@@ -1,8 +1,10 @@
+from Jogador import Jogador
+
 class Time:
     
-    def __init__(self, nome, jogadores, tecnico, casa):
+    def __init__(self, nome, tecnico, casa):
         self.__nome = nome
-        self.__jogadores = jogadores
+        self.__jogadores = []
         self.__tecnico = tecnico
         self.__casa = casa
         
