@@ -4,15 +4,17 @@ from modelo.Time import Time
 from modelo.Jogador import Jogador
 
 class TelaAdministrador:
+    
     def __init__(self):
+
         self.window = tk.Tk()
         self.window.title("Tela de Administrador")
         
         self.times_cadastrados = []
         
-        self.create_widgets()
+        self.cria_botao()
 
-    def create_widgets(self):
+    def cria_botao(self):
         self.label_bem_vindo = tk.Label(self.window, text="Bem-vindo, Administrador!")
         self.label_bem_vindo.grid(row=0, column=0, columnspan=2, padx=10, pady=10)
 
@@ -80,44 +82,45 @@ class TelaAdministrador:
         posicao_jogador = self.entry_posicao_jogador.get()
 
         if nome_jogador == "" or numero_jogador == "" or posicao_jogador == "":
-            messagebox.showwarning("Aviso", "Por favor, preencha todos os campos do jogador.")
+            messagebox.showwarning("AVISO" ,"Todos os campos devem ser preenchidos!")
         else:
             jogador = Jogador(nome_jogador, numero_jogador, posicao_jogador)
-            self.jogadores_adicionados.append(jogador)
+
+            self.jogadores_adicionados.append(jogador)  #adiciopna o jogador na lista
             
             self.entry_nome_jogador.delete(0, tk.END)
             self.entry_numero_jogador.delete(0, tk.END)
             self.entry_posicao_jogador.delete(0, tk.END)
             
-            messagebox.showinfo("Sucesso", f"Jogador {nome_jogador} adicionado ao time!")
+            messagebox.showinfo(f"SUCESSO", "Jogador {nome_jogador} adicionado ao time!")
 
     def confirmar_cadastro(self):
         nome_time = self.entry_nome_time.get()
         nome_tecnico = self.entry_tecnico.get()
 
         if nome_time == "" or nome_tecnico == "":
-            messagebox.showwarning("Aviso", "Por favor, preencha todos os campos do time.")
+            messagebox.showwarning("AVISO" ,"Todos os campos devem ser preenchidos!")
         else:
             time = Time(nome_time, nome_tecnico)
             for jogador in self.jogadores_adicionados:
                 time.addJogador(jogador)
 
-            self.times_cadastrados.append(time)
+            self.times_cadastrados.append(time) #adiciona o time na lista
             
             self.cadastro_window.destroy()
             
-            messagebox.showinfo("Sucesso", f"Time {nome_time} cadastrado com sucesso!")
+            messagebox.showinfo("SUCESSO",f"Time {nome_time} cadastrado com sucesso!")
 
     def visualizar_times(self):
         if not self.times_cadastrados:
-            messagebox.showinfo("Nenhum Time Cadastrado", "Não há times cadastrados.")
+            messagebox.showinfo("AVISO","Não há times cadastrados.")
         else:
             times_info = "\n".join([f"{time.nome} - Técnico: {time.tecnico}" for time in self.times_cadastrados])
-            messagebox.showinfo("Times Cadastrados", f"Times cadastrados:\n{times_info}")
+            messagebox.showinfo("SUCESSO",f"Times cadastrados:\n{times_info}")
 
     def remover_time(self):
         if not self.times_cadastrados:
-            messagebox.showinfo("Nenhum Time Cadastrado", "Não há times cadastrados para remover.")
+            messagebox.showinfo("AVISO","Não há times cadastrados.")
             return
         
         self.remover_window = tk.Toplevel(self.window)
@@ -142,14 +145,14 @@ class TelaAdministrador:
 
             self.times_cadastrados.remove(time_para_remover)
             self.remover_window.destroy()
-            messagebox.showinfo("Sucesso", f"Time {time_selecionado} removido com sucesso!")
+            messagebox.showinfo("SUCESSO",f"Time {time_selecionado} removido com sucesso!")
 
         except IndexError:
-            messagebox.showwarning("Aviso", "Por favor, selecione um time para remover.")
+            messagebox.showwarning("AVISO" ,"Todos os campos devem ser preenchidos!")
 
     def atualizar_time(self):
         if not self.times_cadastrados:
-            messagebox.showinfo("Nenhum Time Cadastrado", "Não há times cadastrados para atualizar.")
+            messagebox.showinfo("AVISO","Não há times cadastrados para atualizar.")
             return
         
         self.atualizar_window = tk.Toplevel(self.window)
@@ -204,7 +207,7 @@ class TelaAdministrador:
             self.btn_remover_jogador.grid(row=6, column=0, padx=10, pady=5)
 
         except IndexError:
-            messagebox.showwarning("Aviso", "Por favor, selecione um time para editar.")
+            messagebox.showwarning("AVISO" ,"Todos os campos devem ser preenchidos!")
 
     def adicionar_jogador_editar(self):
         nome_jogador = self.entry_nome_jogador.get()
@@ -212,7 +215,7 @@ class TelaAdministrador:
         posicao_jogador = self.entry_posicao_jogador.get()
 
         if nome_jogador == "" or numero_jogador == "" or posicao_jogador == "":
-            messagebox.showwarning("Aviso", "Por favor, preencha todos os campos do jogador.")
+            messagebox.showwarning("AVISO" ,"Todos os campos devem ser preenchidos!")        
         else:
             time_selecionado = self.lista_times.get(self.lista_times.curselection())
             time_para_editar = next(time for time in self.times_cadastrados if time.nome == time_selecionado)
@@ -221,7 +224,7 @@ class TelaAdministrador:
             time_para_editar.addJogador(jogador)
             
             self.editar_window.destroy()
-            messagebox.showinfo("Sucesso", f"Jogador {nome_jogador} adicionado ao time {time_selecionado}!")
+            messagebox.showinfo("SUCESSO",f"Jogador {nome_jogador} adicionado ao time {time_selecionado}!")
 
     def remover_jogador(self, time):
         jogador_selecionado = self.lista_jogadores.get(self.lista_jogadores.curselection())
@@ -229,15 +232,15 @@ class TelaAdministrador:
 
         if jogador_para_remover:
             time.removeJogador(jogador_para_remover)
-            messagebox.showinfo("Sucesso", f"Jogador {jogador_selecionado} removido com sucesso!")
+            messagebox.showinfo("SUCESSO",f"Jogador {jogador_selecionado} removido com sucesso!")
         else:
             messagebox.showwarning("Aviso", "Jogador não encontrado.")
 
     def adicionar_jogo(self):
-        messagebox.showinfo("Adicionar Jogo", "Opção para adicionar jogo (implementação futura).")
+        messagebox.showinfo("Adicionar Jogo","Adicionar Jogo")
 
     def verificar_tabela(self):
-        messagebox.showinfo("Verificar Tabela", "Opção para verificar tabela (implementação futura).")
+        messagebox.showinfo("Verificar Tabela", "Verificar tabela")
 
     def logout(self):
         self.window.quit()

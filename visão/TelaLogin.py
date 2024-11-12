@@ -4,6 +4,7 @@ import tkinter as tk
 from tkinter import messagebox
 
 class TelaLogin:
+    
     def __init__(self):
         self.window = tk.Tk()
         self.window.title("Tela de Login")
@@ -52,7 +53,7 @@ class TelaLogin:
                 tela_torcedor = TelaTorcedor()
                 tela_torcedor.run()
             else:
-                messagebox.showinfo("Sucesso", f"Bem-vindo {nome}! Você se conectou como {tipo_usuario}.")
+                messagebox.showinfo("Sucesso", f"Bem-vindo {nome}! Você entrou como {tipo_usuario}.")
                 self.window.quit()
                 self.window.destroy()
 

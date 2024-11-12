@@ -1,4 +1,11 @@
+import tkinter as tk
+from tkinter import messagebox
+from modelo.Time import Time
+from modelo.Jogador import Jogador
+
 class TelaTorcedor:
+
+
     def __init__(self, window, times_cadastrados):
         self.window = window
         self.times_cadastrados = times_cadastrados
@@ -24,7 +31,7 @@ class TelaTorcedor:
         messagebox.showinfo("Times Cadastrados", f"Times cadastrados:\n{times}")
 
     def verificar_tabela(self):
-        messagebox.showinfo("Tabela", "Função para verificar tabela ainda não implementada.")
+        messagebox.showinfo("Tabela", "Verificar Tabela")
     
     def logout(self):
         self.window.destroy()

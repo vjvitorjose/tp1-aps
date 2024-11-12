@@ -1,9 +1,9 @@
 class Jogador:
     
     def __init__(self, nome, numero, posicao):
-        self.__nome = nome
-        self.__numero = numero
-        self.__posicao = posicao
+        self.__nome = nome    #atributo privado
+        self.__numero = numero   #atributo privado
+        self.__posicao = posicao  #atributo privado
     
     @property
     def nome(self):

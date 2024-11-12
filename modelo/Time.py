@@ -1,11 +1,13 @@
 from modelo.Jogador import Jogador
+
 class Time:
     
     def __init__(self, nome, tecnico, pontuacao=0):
-        self.__nome = nome
-        self.__jogadores = []
-        self.__tecnico = tecnico
-        self.__pontuacao = pontuacao
+        
+        self.__nome = nome           #atributo privado
+        self.__jogadores = []         #atributo privado
+        self.__tecnico = tecnico          #atributo privado
+        self.__pontuacao = pontuacao        #atributo privado
        
     @property 
     def nome(self):
