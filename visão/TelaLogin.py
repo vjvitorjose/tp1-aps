@@ -1,65 +1,64 @@
+from visão.TelaAdministrador import TelaAdministrador
+from visão.TelaTorcedor import TelaTorcedor
 import tkinter as tk
 from tkinter import messagebox
-from visão.TelaAdministrador import TelaAdministrador
-from visão.TelaTecnico import TelaTecnico
-from visão.TelaTorcedor import TelaTorcedor
-from visão.TelaSelecaoTime import TelaSelecaoTime
 
 class TelaLogin:
-    def __init__(self, master, times):
-        self.master = master
-        self.master.title("Tela de Login")
-        self.master.geometry("300x250")
-        self.times = times
-
-        self.label_nome = tk.Label(self.master, text="Digite seu nome:")
-        self.label_nome.pack(pady=10)
+    def __init__(self):
+        self.window = tk.Tk()
+        self.window.title("Tela de Login")
         
-        self.entry_nome = tk.Entry(self.master)
-        self.entry_nome.pack(pady=5)
+        # Definindo o layout da tela
+        self.create_widgets()
+
+    def create_widgets(self):
+        # Rótulo e campo para o nome
+        self.label_nome = tk.Label(self.window, text="Digite seu nome:")
+        self.label_nome.grid(row=0, column=0, padx=10, pady=5)
         
-        var = tk.StringVar()
-        
-        self.botao_administrador = tk.Radiobutton(self.master, text="Administrador", variable=var, value="Administrador")
-        self.botao_administrador.pack()
+        self.entry_nome = tk.Entry(self.window)
+        self.entry_nome.grid(row=0, column=1, padx=10, pady=5)
 
-        self.botao_tecnico = tk.Radiobutton(self.master, text="Técnico", variable=var, value="Técnico")
-        self.botao_tecnico.pack()
+        # Rótulo e opções de tipo de usuário
+        self.label_tipo_usuario = tk.Label(self.window, text="Selecione o tipo de usuário:")
+        self.label_tipo_usuario.grid(row=1, column=0, padx=10, pady=5)
 
-        self.botao_torcedor = tk.Radiobutton(self.master, text="Torcedor", variable=var, value="Torcedor")
-        self.botao_torcedor.pack()
+        self.tipo_usuario_var = tk.StringVar()
+        self.tipo_usuario_var.set("torcedor")  # Valor padrão
 
-        self.botao_login = tk.Button(self.master, text="Login", command=lambda: self.login(var.get()))
-        self.botao_login.pack(pady=20)
+        self.radio_admin = tk.Radiobutton(self.window, text="Administrador", variable=self.tipo_usuario_var, value="administrador")
+        self.radio_admin.grid(row=1, column=1, padx=10, pady=5, sticky="w")
 
-    def abrir_tela_login(self):
-        root = tk.Tk()
-        TelaLogin(root, self.times)  # Chama a tela de login, passando os times
-        root.mainloop()
+        self.radio_torcedor = tk.Radiobutton(self.window, text="Torcedor", variable=self.tipo_usuario_var, value="torcedor")
+        self.radio_torcedor.grid(row=2, column=1, padx=10, pady=5, sticky="w")
 
+        # Botão de login
+        self.btn_login = tk.Button(self.window, text="Entrar", command=self.login)
+        self.btn_login.grid(row=3, column=0, columnspan=2, padx=10, pady=10)
 
-    # Na TelaLogin
-def login(self, tipo_usuario):
-    if tipo_usuario == "Administrador":
-        self.master.destroy()
-        root_admin = tk.Tk()
-        TelaAdministrador(root_admin, self.times, self.abrir_tela_login)
-        root_admin.mainloop()
-    elif tipo_usuario == "Técnico":
-        self.master.destroy()
-        root_selecao = tk.Tk()
-        # Passa o time selecionado para abrir a tela do Técnico
-        TelaSelecaoTime(root_selecao, self.times, lambda time_selecionado: self.abrir_tela_tecnico(time_selecionado))
-        root_selecao.mainloop()
-    elif tipo_usuario == "Torcedor":
-        self.master.destroy()
-        root_torcedor = tk.Tk()
-        TelaTorcedor(root_torcedor, self.times, self.abrir_tela_login)
-        root_torcedor.mainloop()
+    def login(self):
+        nome = self.entry_nome.get()
+        tipo_usuario = self.tipo_usuario_var.get()
 
-# Função que vai abrir a tela do técnico
-def abrir_tela_tecnico(self, time_selecionado):
-    root_tecnico = tk.Tk()
-    # Passa o time selecionado para a TelaTecnico
-    TelaTecnico(root_tecnico, self.times, self.abrir_tela_login, time_selecionado)
-    root_tecnico.mainloop()
+        if nome == "":
+            messagebox.showwarning("Aviso", "Por favor, digite seu nome.")
+            self.entry_nome.delete(0, tk.END)  # Limpa o campo de nome
+            self.entry_nome.focus()  # Foca novamente no campo de nome
+        else:
+            if tipo_usuario == "administrador":
+                self.window.quit()  # Fecha a tela de login
+                self.window.destroy()  # Garante que a janela de login seja destruída
+                tela_admin = TelaAdministrador()  # Abre a tela de administrador
+                tela_admin.run()
+            elif tipo_usuario == "torcedor":
+                self.window.quit()  # Fecha a tela de login
+                self.window.destroy()  # Garante que a janela de login seja destruída
+                tela_torcedor = TelaTorcedor()  # Abre a tela de torcedor
+                tela_torcedor.run()
+            else:
+                messagebox.showinfo("Sucesso", f"Bem-vindo {nome}! Você se conectou como {tipo_usuario}.")
+                self.window.quit()  # Fecha a janela após o login
+                self.window.destroy()  # Garante que a janela de login seja destruída
+
+    def run(self):
+        self.window.mainloop()
