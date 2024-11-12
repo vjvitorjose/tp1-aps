@@ -1,3 +1,4 @@
+from modelo.Jogador import Jogador
 class Time:
     
     def __init__(self, nome, tecnico, pontuacao=0):
