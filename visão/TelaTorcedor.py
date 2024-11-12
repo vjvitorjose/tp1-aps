@@ -3,11 +3,9 @@ class TelaTorcedor:
         self.window = window
         self.times_cadastrados = times_cadastrados
         
-        # Definindo o título e o tamanho da janela
         self.window.title("Tela Torcedor")
         self.window.geometry("400x400")
         
-        # Criando os botões de opções
         self.btn_visualizar_times = tk.Button(self.window, text="Visualizar Times", command=self.visualizar_times)
         self.btn_visualizar_times.pack(padx=10, pady=10)
 
@@ -22,7 +20,6 @@ class TelaTorcedor:
             messagebox.showinfo("Nenhum Time Cadastrado", "Não há times cadastrados para visualizar.")
             return
 
-        # Exibir a lista de times cadastrados
         times = "\n".join([time.nome for time in self.times_cadastrados])
         messagebox.showinfo("Times Cadastrados", f"Times cadastrados:\n{times}")
 
