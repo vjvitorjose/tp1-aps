@@ -5,21 +5,26 @@ class Jogador:
         self.__numero = numero
         self.__posicao = posicao
     
-    def getNome(self):
+    @property
+    def nome(self):
         return self.__nome
     
-    def setNome(self, nome):
+    @nome.setter
+    def nome(self, nome):
         self.__nome = nome
     
-    def getNumero(self):
+    @property
+    def numero(self):
         return self.__numero
     
-    def setNumero(self, numero):
+    @numero.setter
+    def numero(self, numero):
         self.__numero = numero
     
-    def getPosicao(self):
+    @property
+    def posicao(self):
         return self.__posicao
     
-    def setPosicao(self, posicao):
+    @posicao.setter
+    def posicao(self, posicao):
         self.__posicao = posicao
-    
