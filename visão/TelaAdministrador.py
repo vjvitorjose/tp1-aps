@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import messagebox
 from modelo.Time import Time
 from modelo.Jogador import Jogador
+import json
 
 class TelaAdministrador:
     
@@ -11,6 +12,7 @@ class TelaAdministrador:
         self.window.title("Tela de Administrador")
         
         self.times_cadastrados = []
+        self.jogadores_adicionados = []
         
         self.cria_botao()
 
@@ -40,6 +42,7 @@ class TelaAdministrador:
         self.btn_logout.grid(row=7, column=0, columnspan=2, padx=10, pady=10)
 
     def cadastrar_time(self):
+
         self.cadastro_window = tk.Toplevel(self.window)
         self.cadastro_window.title("Cadastro de Time")
 
@@ -53,46 +56,63 @@ class TelaAdministrador:
         self.entry_tecnico = tk.Entry(self.cadastro_window)
         self.entry_tecnico.grid(row=1, column=1, padx=10, pady=5)
 
-        self.label_nome_jogador = tk.Label(self.cadastro_window, text="Nome do Jogador:")
-        self.label_nome_jogador.grid(row=2, column=0, padx=10, pady=5)
-        self.entry_nome_jogador = tk.Entry(self.cadastro_window)
-        self.entry_nome_jogador.grid(row=2, column=1, padx=10, pady=5)
-
-        self.label_numero_jogador = tk.Label(self.cadastro_window, text="Número do Jogador:")
-        self.label_numero_jogador.grid(row=3, column=0, padx=10, pady=5)
-        self.entry_numero_jogador = tk.Entry(self.cadastro_window)
-        self.entry_numero_jogador.grid(row=3, column=1, padx=10, pady=5)
-
-        self.label_posicao_jogador = tk.Label(self.cadastro_window, text="Posição do Jogador:")
-        self.label_posicao_jogador.grid(row=4, column=0, padx=10, pady=5)
-        self.entry_posicao_jogador = tk.Entry(self.cadastro_window)
-        self.entry_posicao_jogador.grid(row=4, column=1, padx=10, pady=5)
-
-        self.btn_adicionar_jogador = tk.Button(self.cadastro_window, text="Adicionar Jogador", command=self.adicionar_jogador)
-        self.btn_adicionar_jogador.grid(row=5, column=0, columnspan=2, padx=10, pady=5)
-
-        self.btn_confirmar = tk.Button(self.cadastro_window, text="Cadastrar Time", command=self.confirmar_cadastro)
+        self.btn_confirmar = tk.Button(self.cadastro_window, text="Adicionar Jogadores", command=self.adicionar_jogador)
         self.btn_confirmar.grid(row=6, column=0, columnspan=2, padx=10, pady=10)
 
-        self.jogadores_adicionados = []  # Lista de jogadores adicionados
-
+    
     def adicionar_jogador(self):
+
+        if hasattr(self, 'jogadores_window') and self.jogadores_window.winfo_exists():
+            return  # Se a janela de jogadores já estiver aberta, não faz nada
+
+
+        self.adicionar_jogador_window = tk.Toplevel(self.window)
+        self.adicionar_jogador_window.title("Adicionar Jogadores")
+
+        self.label_nome_jogador = tk.Label(self.adicionar_jogador_window, text="Nome do Jogador:")
+        self.label_nome_jogador.grid(row=0, column=0, padx=10, pady=5)
+        self.entry_nome_jogador = tk.Entry(self.adicionar_jogador_window)
+        self.entry_nome_jogador.grid(row=0, column=1, padx=10, pady=5)
+
+        self.label_numero_jogador = tk.Label(self.adicionar_jogador_window, text="Número do Jogador:")
+        self.label_numero_jogador.grid(row=1, column=0, padx=10, pady=5)
+        self.entry_numero_jogador = tk.Entry(self.adicionar_jogador_window)
+        self.entry_numero_jogador.grid(row=1, column=1, padx=10, pady=5)
+
+        self.label_posicao_jogador = tk.Label(self.adicionar_jogador_window, text="Posição do Jogador:")
+        self.label_posicao_jogador.grid(row=2, column=0, padx=10, pady=5)
+        self.entry_posicao_jogador = tk.Entry(self.adicionar_jogador_window)
+        self.entry_posicao_jogador.grid(row=2, column=1, padx=10, pady=5)
+
+        
+        self.btn_adicionar_jogador = tk.Button(self.adicionar_jogador_window, text="Adicionar Jogador", command=self.adicionar_jogador)
+        self.btn_adicionar_jogador.grid(row=3, column=0, columnspan=2, padx=10, pady=5)
+
+ 
+        self.btn_salvar_time = tk.Button(self.adicionar_jogador_window, text="Salvar Time", command=self.confirmar_cadastro)
+        self.btn_salvar_time.grid(row=4, column=0, columnspan=2, padx=10, pady=10)
+
+    def adicionar_jogador_lista(self):
         nome_jogador = self.entry_nome_jogador.get()
         numero_jogador = self.entry_numero_jogador.get()
         posicao_jogador = self.entry_posicao_jogador.get()
 
         if nome_jogador == "" or numero_jogador == "" or posicao_jogador == "":
-            messagebox.showwarning("AVISO" ,"Todos os campos devem ser preenchidos!")
+            messagebox.showwarning("AVISO", "Todos os campos devem ser preenchidos!")
         else:
-            jogador = Jogador(nome_jogador, numero_jogador, posicao_jogador)
+            jogador = {
+                "nome": nome_jogador,
+                "numero": numero_jogador,
+                "posicao": posicao_jogador
+            }
 
-            self.jogadores_adicionados.append(jogador)  #adiciopna o jogador na lista
-            
+            self.jogadores_adicionados.append(jogador)
             self.entry_nome_jogador.delete(0, tk.END)
             self.entry_numero_jogador.delete(0, tk.END)
             self.entry_posicao_jogador.delete(0, tk.END)
-            
-            messagebox.showinfo(f"SUCESSO", "Jogador {nome_jogador} adicionado ao time!")
+
+            messagebox.showinfo("SUCESSO", f"Jogador {nome_jogador} adicionado ao time!")
+
 
     def confirmar_cadastro(self):
         nome_time = self.entry_nome_time.get()
@@ -100,16 +120,34 @@ class TelaAdministrador:
 
         if nome_time == "" or nome_tecnico == "":
             messagebox.showwarning("AVISO" ,"Todos os campos devem ser preenchidos!")
-        else:
-            time = Time(nome_time, nome_tecnico)
-            for jogador in self.jogadores_adicionados:
-                time.addJogador(jogador)
 
-            self.times_cadastrados.append(time) #adiciona o time na lista
-            
-            self.cadastro_window.destroy()
-            
+        else:
+            time = {
+                "nome_time": nome_time,
+                "nome_tecnico": nome_tecnico,
+                "jogadores": []
+            }
+
+            self.salvar_times_em_arquivo(time)
             messagebox.showinfo("SUCESSO",f"Time {nome_time} cadastrado com sucesso!")
+
+            self.cadastro_window.destroy()
+
+    def salvar_times_em_arquivo(self,time):
+        try:
+             with open("times_cadastrados.json", "a") as file:
+                json.dump(time, file, indent=4)
+                file.write("\n") 
+        except Exception as e:
+            messagebox.showerror("ERRO", f"Erro ao salvar o time: {str(e)}")
+    
+    def carregar_times(self):
+        try:
+            with open("times_cadastrados.json", "r") as file:
+                times = [json.loads(line) for line in file]
+                return times
+        except FileNotFoundError:
+            return []
 
     def visualizar_times(self):
         if not self.times_cadastrados:
@@ -236,9 +274,81 @@ class TelaAdministrador:
         else:
             messagebox.showwarning("Aviso", "Jogador não encontrado.")
 
+        
+
     def adicionar_jogo(self):
         messagebox.showinfo("Adicionar Jogo","Adicionar Jogo")
 
+        if len(self.times_cadastrados) < 2:
+            messagebox.showinfo("AVISO", "Adicione 2 times para adicionar um jogo.")
+            return
+        
+        self.jogo_window = tk.Toplevel(self.window)
+        self.jogo_window.title("Adicionar Jogo")
+
+        self.label_time1 = tk.Label(self.jogo_window, text="time 1:")
+        self.label_time1.grid(row=0, column=0, padx=10, pady=5)
+        self.lista_time1 = tk.Listbox(self.jogo_window)
+        for time in self.times_cadastrados:
+            self.lista_time1.insert(tk.END, time.nome)
+        self.lista_time1.grid(row=0, column=1, padx=10, pady=5)
+
+
+        self.label_time2 = tk.Label(self.jogo_window, text="time 2:")
+        self.label_time2.grid(row=1, column=0, padx=10, pady=5)
+        self.lista_time2 = tk.Listbox(self.jogo_window)
+        for time in self.times_cadastrados:
+            self.lista_time2.insert(tk.END, time.nome)
+        self.lista_time2.grid(row=1, column=1, padx=10, pady=5)
+
+        self.label_placar = tk.Label(self.jogo_window, text="Placar (time 1 x time 2):")
+        self.label_placar.grid(row=2, column=0, padx=10, pady=5)
+        self.entry_placar1 = tk.Entry(self.jogo_window, width=5)
+        self.entry_placar1.grid(row=2, column=1, padx=5, pady=5, sticky="W")
+        self.label_x = tk.Label(self.jogo_window, text="x")
+        self.label_x.grid(row=2, column=1, padx=5, pady=5)
+        self.entry_placar2 = tk.Entry(self.jogo_window, width=5)
+        self.entry_placar2.grid(row=2, column=1, padx=5, pady=5, sticky="E")
+
+        
+        self.label_data = tk.Label(self.jogo_window, text="Data do Jogo:")
+        self.label_data.grid(row=3, column=0, padx=10, pady=5)
+        self.entry_data = tk.Entry(self.jogo_window)
+        self.entry_data.grid(row=3, column=1, padx=10, pady=5)
+
+        
+        self.btn_confirmar_jogo = tk.Button(self.jogo_window, text="Adicionar Jogo", command=self.confirmar_jogo)
+        self.btn_confirmar_jogo.grid(row=4, column=0, columnspan=2, padx=10, pady=10)
+
+    def confirmar_jogo(self):
+            try:
+                time1 = self.lista_time1.get(self.lista_time1.curselection())
+                time2 = self.lista_time2.get(self.lista_time2.curselection())
+                placar1 = int(self.entry_placar1.get())
+                placar2 = int(self.entry_placar2.get())
+                data = self.entry_data.get()
+
+                if time1 == time2:
+                    messagebox.showwarning("AVISO", "Os times devem ser diferentes!")
+                    return
+
+                if data == "":
+                    messagebox.showwarning("AVISO", "Preencha todos os campos corretamente!")
+                    return
+
+  
+                jogo = Jogo(time1, time2, placar1, placar2, data)
+                self.jogos.append(jogo)
+
+                
+                messagebox.showinfo("SUCESSO", f"Jogo adicionado:\n{jogo}")
+                self.jogo_window.destroy()
+
+            except IndexError:
+                messagebox.showwarning("AVISO", "Selecione ambas as times!")
+            except ValueError:
+                messagebox.showwarning("AVISO", "O placar deve ser um número válido!")
+                
     def verificar_tabela(self):
         messagebox.showinfo("Verificar Tabela", "Verificar tabela")
 
