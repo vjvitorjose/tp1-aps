@@ -1,41 +1,234 @@
 [
     {
-        "nome_time": "cec",
-        "nome_tecnico": "seabra",
-        "jogadores": []
+        "nome_time": "b",
+        "nome_tecnico": "b"
     }
-]{
-    "nome_time": "w",
-    "nome_tecnico": "e",
-    "jogadores": []
-}
-{
-    "nome_time": "flamengo",
-    "nome_tecnico": "Felipe Luis",
-    "jogadores": []
-}
-{
-    "nome_time": "rq",
-    "nome_tecnico": "rrrrrrrrrrr",
-    "jogadores": []
-}
-{
-    "nome_time": "3e",
-    "nome_tecnico": "3",
-    "jogadores": []
-}
-{
-    "nome_time": "f",
-    "nome_tecnico": "r",
-    "jogadores": []
-}
-{
-    "nome_time": "d",
-    "nome_tecnico": "d",
-    "jogadores": []
-}
-{
-    "nome_time": "d",
-    "nome_tecnico": "d",
-    "jogadores": []
-}
+]
+[
+    {
+        "nome_time": "r",
+        "nome_tecnico": "r"
+    }
+]
+[
+    {
+        "nome_time": "f",
+        "nome_tecnico": "f"
+    }
+]
+[
+    {
+        "nome_time": "4",
+        "nome_tecnico": "4"
+    }
+]
+[
+    {
+        "nome_time": "t",
+        "nome_tecnico": "t"
+    }
+]
+[
+    {
+        "nome_time": "g",
+        "nome_tecnico": "g"
+    }
+]
+[
+    {
+        "nome_time": "[",
+        "nome_tecnico": "["
+    }
+]
+[
+    {
+        "nome_time": "d",
+        "nome_tecnico": "d"
+    }
+]
+[
+    {
+        "nome_time": "e",
+        "nome_tecnico": "e"
+    }
+]
+[
+    {
+        "nome_time": "t",
+        "nome_tecnico": "t"
+    }
+]
+[
+    {
+        "nome_time": "t",
+        "nome_tecnico": "t"
+    },
+    {
+        "nome_time": "a",
+        "nome_tecnico": "a"
+    }
+]
+[
+    {
+        "nome_time": "t",
+        "nome_tecnico": "d"
+    }
+]
+[
+    {
+        "nome_time": "t",
+        "nome_tecnico": "d"
+    },
+    {
+        "nome_time": "r",
+        "nome_tecnico": "d"
+    }
+]
+[
+    {
+        "nome_time": "c",
+        "nome_tecnico": "c"
+    }
+]
+[
+    {
+        "nome_time": "cec",
+        "nome_tecnico": "diniz"
+    }
+]
+[
+    {
+        "nome_time": "cec",
+        "nome_tecnico": "diniz"
+    },
+    {
+        "nome_time": " g",
+        "nome_tecnico": " "
+    }
+]
+[
+    {
+        "nome_time": "cec",
+        "nome_tecnico": "diniz"
+    },
+    {
+        "nome_time": " g",
+        "nome_tecnico": " "
+    },
+    {
+        "nome_time": "g",
+        "nome_tecnico": "g"
+    }
+]
+[
+    {
+        "nome_time": "cruzeiro",
+        "nome_tecnico": "diniz"
+    }
+]
+[
+    {
+        "nome_time": "cruzeiro",
+        "nome_tecnico": "diniz"
+    },
+    {
+        "nome_time": "de",
+        "nome_tecnico": "sa"
+    }
+]
+[
+    {
+        "nome_time": "t",
+        "nome_tecnico": "t"
+    }
+]
+[
+    {
+        "nome_time": "t",
+        "nome_tecnico": "t"
+    },
+    {
+        "nome_time": "d",
+        "nome_tecnico": "d"
+    }
+]
+[
+    {
+        "nome_time": "t",
+        "nome_tecnico": "t"
+    }
+]
+[
+    {
+        "nome_time": "t",
+        "nome_tecnico": "t"
+    },
+    {
+        "nome_time": "t",
+        "nome_tecnico": "t"
+    }
+]
+[
+    {
+        "nome_time": "e",
+        "nome_tecnico": "e"
+    }
+]
+[
+    {
+        "nome_time": "e",
+        "nome_tecnico": "e"
+    },
+    {
+        "nome_time": "s",
+        "nome_tecnico": "s"
+    }
+]
+[
+    {
+        "nome_time": "3",
+        "nome_tecnico": "3"
+    }
+]
+[
+    {
+        "nome_time": "3",
+        "nome_tecnico": "3"
+    },
+    {
+        "nome_time": "4",
+        "nome_tecnico": "4"
+    }
+]
+[
+    {
+        "nome_time": "U",
+        "nome_tecnico": "U"
+    }
+]
+[
+    {
+        "nome_time": "U",
+        "nome_tecnico": "U"
+    },
+    {
+        "nome_time": "F",
+        "nome_tecnico": "F"
+    }
+]
+[
+    {
+        "nome_time": "w",
+        "nome_tecnico": "w"
+    }
+]
+[
+    {
+        "nome_time": "w",
+        "nome_tecnico": "w"
+    },
+    {
+        "nome_time": "ee",
+        "nome_tecnico": "ee"
+    }
+]
