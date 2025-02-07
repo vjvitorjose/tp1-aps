@@ -6,6 +6,7 @@ from modelo.Jogador import Jogador
 from modelo.Partida import Partida
 
 import json
+import os
 from tkinter import ttk
 
 class TelaAdministrador:
@@ -14,7 +15,7 @@ class TelaAdministrador:
 
         self.window = tk.Tk()
         self.window.title("Tela de Administrador")
-        
+        self.nome_time = ""
         self.times_cadastrados = []
         self.jogadores_adicionados = []
         self.jogos = []
@@ -68,7 +69,6 @@ class TelaAdministrador:
         self.btn_salvar_time = tk.Button(self.cadastro_window, text="Salvar Time", command=self.salvar_time)
         self.btn_salvar_time.grid(row=2, column=0, columnspan=2, padx=10, pady=10)
 
-
     def adicionar_jogador(self):
 
         if hasattr(self, 'jogadores_window') and self.jogadores_window.winfo_exists():
@@ -100,7 +100,6 @@ class TelaAdministrador:
  
         self.btn_salvar_time = tk.Button(self.adicionar_jogador_window, text="Salvar Time", command=self.confirmar_cadastro)
         self.btn_salvar_time.grid(row=4, column=0, columnspan=2, padx=10, pady=10)
-
 
     def salvar_jogador(self):
         # Lógica para salvar o jogador
@@ -135,7 +134,6 @@ class TelaAdministrador:
         self.salvar_times_em_arquivo( )  
         self.visualizar_times()
 
-
     def adicionar_jogador_lista(self):
         nome_jogador = self.entry_nome_jogador.get()
         numero_jogador = self.entry_numero_jogador.get()
@@ -168,31 +166,17 @@ class TelaAdministrador:
         self.adicionar_jogador_window.destroy()
 
     def salvar_times_em_arquivo(self):
-        try:
-             with open("times_cadastrados.json", "a") as file:
-                json.dump(self.times_cadastrados, file, indent=4)
-                file.write("\n") 
-        except Exception as e:
-            messagebox.showerror("ERRO", f"Erro ao salvar o time: {str(e)}")
-    
+        with open("times_cadastrados.json", "w", encoding="utf-8") as f:
+            json.dump(self.times_cadastrados, f, ensure_ascii=False, indent=4)
 
     def carregar_times(self):
-        try:
-            with open('times_cadastrados.json', 'r') as file:
-                times = [] 
-                for line in file:
-                    try:
-                        times.append(json.loads(line))  
-                    except json.JSONDecodeError:
-                        pass  # Se a linha não for válida, ignora
-                self.times_cadastrados = [time for sublist in times for time in sublist]  # Achata a lista
-                print(f"Times carregados: {self.times_cadastrados}")  # Exibe os times no console para depuração
-        except FileNotFoundError:
-            messagebox.showerror("Erro", "Arquivo de times não encontrado.")
-            self.times_cadastrados = []  # Inicializa como vazio em caso de arquivo não encontrado
-        except Exception as e:
-            messagebox.showerror("Erro desconhecido", f"Erro inesperado: {e}")
-            self.times_cadastrados = []  # Inicializa como vazio em caso de erro inesperado
+        if os.path.exists("times_cadastrados.json"):
+            try:
+                with open("times_cadastrados.json", "r", encoding="utf-8") as f:
+                    self.times_cadastrados = json.load(f)
+            except json.JSONDecodeError as e:
+                messagebox.showerror("Erro de JSON", f"Erro ao carregar os dados: {e}")
+                self.times_cadastrados = []  # Define a lista como vazia em caso de erro
 
     def visualizar_times(self):
         if not self.times_cadastrados:
@@ -214,20 +198,16 @@ class TelaAdministrador:
         if not self.times_cadastrados:
             messagebox.showinfo("AVISO", "Não há times cadastrados.")
             return
-        
+
         self.remover_window = tk.Toplevel(self.window)
         self.remover_window.title("Remover Time")
-        
+
         self.label_selecionar_time = tk.Label(self.remover_window, text="Selecione um time para remover:")
         self.label_selecionar_time.grid(row=0, column=0, padx=10, pady=10)
 
         self.lista_times = tk.Listbox(self.remover_window)
         for time in self.times_cadastrados:
-            self.lista_times.insert(tk.END, time['nome_time'])  
-        self.lista_times.grid(row=1, column=0, padx=10, pady=10)
-
-        self.btn_remover = tk.Button(self.remover_window, text="Remover Time", command=self.confirmar_remocao)
-        self.btn_remover.grid(row=2, column=0, padx=10, pady=10)
+            self.lista_times.insert
 
     def confirmar_remocao(self):
         try:
@@ -267,11 +247,21 @@ class TelaAdministrador:
         self.btn_editar = tk.Button(self.atualizar_window, text="Editar Time", command=self.editar_time)
         self.btn_editar.grid(row=2, column=0, padx=10, pady=10)
 
-
     def editar_time(self):
         try:
-            time_selecionado = self.lista_times.get(self.lista_times.curselection())
-            time_para_editar = next(time for time in self.times_cadastrados if ['nome_time'] == time_selecionado)
+            try:
+                time_selecionado = self.lista_times.get(self.lista_times.curselection())
+            except tk.TclError:
+                messagebox.showwarning("Aviso", "Nenhum time foi selecionado!")
+                return
+
+            time_encontrado = [time for time in self.times_cadastrados if time["nome_time"] == time_selecionado]
+
+            if not time_encontrado:
+                messagebox.showwarning("Aviso", f"Time '{time_selecionado}' não encontrado!")
+                return
+
+            time_para_editar = time_encontrado[0]
 
             self.editar_window = tk.Toplevel(self.atualizar_window)
             self.editar_window.title(f"Editar Time: {time_selecionado}")
@@ -298,32 +288,64 @@ class TelaAdministrador:
             self.label_remover_jogador.grid(row=4, column=0, padx=10, pady=5)
 
             self.lista_jogadores = tk.Listbox(self.editar_window)
-            for jogador in time_para_editar['jogadores']:
-                self.lista_jogadores.insert(tk.END, jogador['nome'])
+            for jogador in time_para_editar.get('jogadores', []):
+                self.lista_jogadores.insert(tk.END, jogador.get('nome', 'Desconhecido'))
             self.lista_jogadores.grid(row=5, column=0, padx=10, pady=5)
 
             self.btn_remover_jogador = tk.Button(self.editar_window, text="Remover Jogador", command=lambda: self.remover_jogador(time_para_editar))
             self.btn_remover_jogador.grid(row=6, column=0, padx=10, pady=5)
 
         except IndexError:
-            messagebox.showwarning("AVISO" ,"Todos os campos devem ser preenchidos!")
+            messagebox.showwarning("AVISO", "Todos os campos devem ser preenchidos!")
+     
+    def cadastrar_jogador(self):
+        jogador_window = tk.Toplevel(self.window)
+        jogador_window.title("Cadastrar Jogador")
+        jogador_window.geometry("500x500")
 
-    def adicionar_jogador_editar(self):
-        nome_jogador = self.entry_nome_jogador.get()
-        numero_jogador = self.entry_numero_jogador.get()
-        posicao_jogador = self.entry_posicao_jogador.get()
+        # Label e Listbox para selecionar o time
+        label_time = tk.Label(jogador_window, text="Selecione o time do jogador:")
+        label_time.grid(row=0, column=0, padx=10, pady=5)
 
-        if nome_jogador == "" or numero_jogador == "" or posicao_jogador == "":
-            messagebox.showwarning("AVISO" ,"Todos os campos devem ser preenchidos!")        
-        else:
-            time_selecionado = self.lista_times.get(self.lista_times.curselection())
-            time_para_editar = next(time for time in self.times_cadastrados if time.nome == time_selecionado)
-            
-            jogador = Jogador(nome_jogador, numero_jogador, posicao_jogador)
-            time_para_editar.addJogador(jogador)
-            
-            self.editar_window.destroy()
-            messagebox.showinfo("SUCESSO",f"Jogador {nome_jogador} adicionado ao time {time_selecionado}!")
+        lista_times = tk.Listbox(jogador_window, selectmode=tk.SINGLE, height=10)  # Seleção de um time
+        for time in self.times_cadastrados:
+            lista_times.insert(tk.END, time.nome)  # Inserir nome dos times na Listbox
+        lista_times.grid(row=0, column=1, padx=10, pady=5)
+
+        # Label e Entry para nome do jogador
+        label_nome = tk.Label(jogador_window, text="Nome do Jogador:")
+        label_nome.grid(row=1, column=0, padx=10, pady=5)
+        entry_nome = tk.Entry(jogador_window)
+        entry_nome.grid(row=1, column=1, padx=10, pady=5)
+
+        # Função para salvar o jogador
+        def salvar_jogador():
+            nome_jogador = entry_nome.get()
+            if not nome_jogador:
+                messagebox.showerror("Erro", "O nome do jogador não pode estar vazio.")
+                return
+
+            selected_index = lista_times.curselection()
+            if not selected_index:
+                messagebox.showerror("Erro", "Selecione um time.")
+                return
+
+            # Achar o time selecionado
+            time_selecionado = self.times_cadastrados[selected_index[0]]
+
+            # Criar jogador e adicionar ao time
+            jogador = Jogador(nome=nome_jogador)  # Criar o jogador
+            time_selecionado.addJogador(jogador)
+
+            # Salvar jogador no arquivo JSON
+            time_selecionado.salvar_em_arquivo('times.json')
+
+            messagebox.showinfo("Sucesso", f"Jogador {nome_jogador} adicionado ao time {time_selecionado.nome}!")
+            jogador_window.destroy()
+
+        # Botão para salvar o jogador
+        botao_salvar = tk.Button(jogador_window, text="Salvar Jogador", command=salvar_jogador)
+        botao_salvar.grid(row=2, column=1, padx=10, pady=10)
 
     def remover_jogador(self, time):
         # Verifica se um item foi selecionado na lista
@@ -346,90 +368,78 @@ class TelaAdministrador:
             messagebox.showinfo("SUCESSO", f"Jogador {jogador_selecionado} removido com sucesso!")
         else:
             messagebox.showwarning("Aviso", "Jogador não encontrado.")
+    
+    def salvar_jogos(self):
+            """Salva os jogos no arquivo JSON."""
+            with open("jogos.json", "w", encoding="utf-8") as f:
+                json.dump(self.jogos, f, ensure_ascii=False, indent=4)
 
-  
     def adicionar_jogo(self):
-        jogo_window = tk.Toplevel(self.window)  
+        jogo_window = tk.Toplevel(self.window)
         jogo_window.title("Adicionar Jogo")
         jogo_window.geometry("500x500")
 
-        # Label e Listbox para a Equipe 1
-        label_equipe1 = tk.Label(jogo_window, text="Equipe 1:")
-        label_equipe1.grid(row=0, column=0, padx=10, pady=5)
-        lista_equipe1 = tk.Listbox(jogo_window, selectmode=tk.SINGLE, height=5)  # Modo SINGLE para selecionar uma equipe por vez
-        for time in self.times_cadastrados:
-            lista_equipe1.insert(tk.END, time['nome_time'])
-        lista_equipe1.grid(row=0, column=1, padx=10, pady=5)
+        # Label e Listbox para selecionar os times
+        label_times = tk.Label(jogo_window, text="Selecione 2 times:")
+        label_times.grid(row=0, column=0, padx=10, pady=5)
 
-        # Label e Listbox para a Equipe 2
-        label_equipe2 = tk.Label(jogo_window, text="Equipe 2:")
-        label_equipe2.grid(row=1, column=0, padx=10, pady=5)
-        lista_equipe2 = tk.Listbox(jogo_window, selectmode=tk.SINGLE, height=5)  # Modo SINGLE para selecionar uma equipe por vez
+        lista_times = tk.Listbox(jogo_window, selectmode=tk.MULTIPLE, height=10)  # Modo MULTIPLE para selecionar mais de um item
         for time in self.times_cadastrados:
-            lista_equipe2.insert(tk.END, time['nome_time'])
-        lista_equipe2.grid(row=1, column=1, padx=10, pady=5)
+            lista_times.insert(tk.END, time['nome_time'])
+        lista_times.grid(row=0, column=1, padx=10, pady=5)
 
         # Label e Entry para o placar
         label_placar = tk.Label(jogo_window, text="Placar (Equipe 1 x Equipe 2):")
-        label_placar.grid(row=2, column=0, padx=10, pady=5)
+        label_placar.grid(row=1, column=0, padx=10, pady=5)
         entry_placar1 = tk.Entry(jogo_window, width=5)
-        entry_placar1.grid(row=2, column=1, padx=5, pady=5, sticky="W")
+        entry_placar1.grid(row=1, column=1, padx=5, pady=5, sticky="W")
         label_x = tk.Label(jogo_window, text="x")
-        label_x.grid(row=2, column=1, padx=5, pady=5)
+        label_x.grid(row=1, column=1, padx=5, pady=5)
         entry_placar2 = tk.Entry(jogo_window, width=5)
-        entry_placar2.grid(row=2, column=1, padx=5, pady=5, sticky="E")
+        entry_placar2.grid(row=1, column=1, padx=5, pady=5, sticky="E")
 
         # Label e Entry para a data
         label_data = tk.Label(jogo_window, text="Data do Jogo:")
-        label_data.grid(row=3, column=0, padx=10, pady=5)
+        label_data.grid(row=2, column=0, padx=10, pady=5)
         entry_data = tk.Entry(jogo_window)
-        entry_data.grid(row=3, column=1, padx=10, pady=5)
+        entry_data.grid(row=2, column=1, padx=10, pady=5)
 
-        def confirmar_jogo():
-            selecao_equipe1 = lista_equipe1.curselection()
-            selecao_equipe2 = lista_equipe2.curselection()
-
-            if not selecao_equipe1 or not selecao_equipe2:
-                messagebox.showwarning("Aviso", "Selecione uma equipe para cada lado.")
+        # Função para salvar o jogo
+        def salvar_jogo():
+            selected_indices = lista_times.curselection()
+            
+            if len(selected_indices) != 2:
+                messagebox.showerror("Erro", "Selecione exatamente 2 times!")
                 return
-
-            equipe1 = lista_equipe1.get(selecao_equipe1)  # Equipe 1
-            equipe2 = lista_equipe2.get(selecao_equipe2)  # Equipe 2
-
-            if equipe1 == equipe2:
-                messagebox.showwarning("Aviso", "As equipes não podem ser as mesmas.")
-                return
-
+            
+            # Captura os times selecionados
+            equipe1 = lista_times.get(selected_indices[0])
+            equipe2 = lista_times.get(selected_indices[1])
             placar1 = entry_placar1.get()
             placar2 = entry_placar2.get()
             data = entry_data.get()
 
             if not placar1 or not placar2 or not data:
-                messagebox.showwarning("Aviso", "Preencha todos os campos corretamente.")
+                messagebox.showerror("Erro", "Todos os campos precisam ser preenchidos!")
                 return
 
-            # Criar o dicionário do jogo
+            # Adiciona o jogo à lista de jogos
             jogo = {
-                "equipe1": equipe1,
-                "equipe2": equipe2,
-                "placar1": placar1,
-                "placar2": placar2,
-                "data": data
+                'equipe1': equipe1,
+                'equipe2': equipe2,
+                'placar': f"{placar1} x {placar2}",
+                'data': data
             }
 
-            # Salvar o jogo no arquivo
-            with open("jogos.json", "a") as file:
-                json.dump(jogo, file)
-                file.write("\n")
+            self.jogos.append(jogo)
+            self.salvar_jogos()  # Salva os jogos no arquivo JSON
 
-            messagebox.showinfo("Sucesso", "Jogo salvo com sucesso!")
-            jogo_window.destroy()  # Fechar a janela
+            # Fechar a janela após salvar
+            jogo_window.destroy()
 
-            # Botão para confirmar e salvar o jogo
-            btn_confirmar_jogo = tk.Button(jogo_window, text="Adicionar Jogo", command=confirmar_jogo)
-            btn_confirmar_jogo.grid(row=4, column=0, columnspan=2, padx=10, pady=10)
-
-
+        # Botão para salvar o jogo
+        botao_salvar = tk.Button(jogo_window, text="Salvar Jogo", command=salvar_jogo)
+        botao_salvar.grid(row=3, column=1, padx=10, pady=10)
         
     def verificar_tabela(self):
 
