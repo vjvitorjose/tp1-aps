@@ -16,10 +16,3 @@ class ControleTime:
         with open(arquivo, "r") as f:
             data = json.load(f)
         return [Time.from_dict(t) for t in data]
-    
-times = []
-time = Time("galo", "cuca")
-times.append(time)
-time = Time("flamengo", "ricardo")
-times.append(time)
-ControleTime.salvar_times(times)
