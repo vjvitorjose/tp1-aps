@@ -99,9 +99,3 @@ class TelaTorcedor:
         tela = tk.Tk()  # Cria uma nova janela
         app = VisaoPartida(tela)  # Passa a janela para a classe VisaoPartida
         tela.mainloop()  # Inicia o loop de eventos da nova janela
-
-# Main para iniciar a tela de login
-if __name__ == "__main__":
-    root = tk.Tk()
-    app = TelaLogin(root)
-    root.mainloop()

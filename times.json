@@ -1,16 +1,28 @@
 [
     {
         "nome": "galo",
-        "jogadores": [],
+        "jogadores": [
+            {
+                "nome": "Jogador Fict\u00edcio",
+                "numero": 99,
+                "posicao": "Meio-campo"
+            }
+        ],
         "pontuacao": 0
     },
     {
-        "nome": "flamengo",
-        "jogadores": [],
+        "nome": "fluminense",
+        "jogadores": [
+            {
+                "nome": "Jogador Fict\u00edcio",
+                "numero": 99,
+                "posicao": "Meio-campo"
+            }
+        ],
         "pontuacao": 0
     },
     {
-        "nome": "gremio",
+        "nome": "juventude",
         "jogadores": [
             {
                 "nome": "Jogador Fict\u00edcio",

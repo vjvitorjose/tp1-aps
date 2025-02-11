@@ -6,14 +6,13 @@ import os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from modelo.Jogador import Jogador
-from controle.ControleJogador import ControleJogador
+from persistencia.PersistenciaJogador import PersistenciaJogador
 
 class VisaoJogador:
-    def __init__(self, master):
+    def __init__(self, master, modo_torcedor=False):
         self.master = master
         self.master.title("Cadastro de Jogadores")
-        
-        self.controle = ControleJogador()
+        self.controle = PersistenciaJogador()
 
         # Criando os campos de entrada
         self.label_nome = tk.Label(master, text="Nome:")
@@ -34,7 +33,7 @@ class VisaoJogador:
         # Botões
         self.botao_cadastrar = tk.Button(master, text="Cadastrar", command=self.cadastrar_jogador)
         self.botao_cadastrar.grid(row=3, column=0)
-
+        
         self.botao_excluir = tk.Button(master, text="Excluir", command=self.excluir_jogador)
         self.botao_excluir.grid(row=3, column=1)
 
@@ -44,6 +43,14 @@ class VisaoJogador:
         # Lista de jogadores
         self.lista_jogadores = tk.Listbox(master)
         self.lista_jogadores.grid(row=5, column=0, columnspan=2, sticky="nsew")
+
+        # Modo Torcedor (Desativar Cadastro e Exclusão)
+        if modo_torcedor:
+            self.entry_nome.config(state="disabled")
+            self.entry_numero.config(state="disabled")
+            self.entry_posicao.config(state="disabled")
+            self.botao_cadastrar.config(state="disabled")
+            self.botao_excluir.config(state="disabled")
 
     def cadastrar_jogador(self):
         nome = self.entry_nome.get()
@@ -64,9 +71,9 @@ class VisaoJogador:
         selecionado = self.lista_jogadores.curselection()
         if selecionado:
             jogador_selecionado = self.lista_jogadores.get(selecionado)
-            nome_jogador = jogador_selecionado.split(" ")[0]
+            nome_jogador = jogador_selecionado.split(" (")[0].strip()  # Extrai o nome corretamente
             jogadores = self.controle.carregar_jogadores()
-            jogadores = [j for j in jogadores if j.nome != nome_jogador]
+            jogadores = [j for j in jogadores if j.nome.strip() != nome_jogador]  # Compara os nomes corretamente
             self.controle.salvar_jogadores(jogadores)
             self.atualizar_lista()
             messagebox.showinfo("Sucesso", f"Jogador {nome_jogador} excluído com sucesso!")

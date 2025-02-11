@@ -1,12 +1,12 @@
 [
     {
+        "nome": "albert einstein",
+        "numero": 33,
+        "posicao": "genio"
+    },
+    {
         "nome": "hulk",
         "numero": 7,
         "posicao": "ata"
-    },
-    {
-        "nome": "ze",
-        "numero": 11,
-        "posicao": "ponta"
     }
 ]
