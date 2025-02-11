@@ -1,30 +1,15 @@
 class Jogador:
-    
     def __init__(self, nome, numero, posicao):
-        self.__nome = nome    #atributo privado
-        self.__numero = numero   #atributo privado
-        self.__posicao = posicao  #atributo privado
+        self.nome = nome
+        self.numero = numero
+        self.posicao = posicao
     
-    @property
-    def nome(self):
-        return self.__nome
+    def __str__(self):
+        return f"{self.nome} ({self.posicao}) - #{self.numero}"
+
+    def to_dict(self):
+        return {"nome": self.nome, "numero": self.numero, "posicao": self.posicao}
     
-    @nome.setter
-    def nome(self, nome):
-        self.__nome = nome
-    
-    @property
-    def numero(self):
-        return self.__numero
-    
-    @numero.setter
-    def numero(self, numero):
-        self.__numero = numero
-    
-    @property
-    def posicao(self):
-        return self.__posicao
-    
-    @posicao.setter
-    def posicao(self, posicao):
-        self.__posicao = posicao
+    @staticmethod
+    def from_dict(data):
+        return Jogador(data["nome"], data["numero"], data["posicao"])

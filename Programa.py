@@ -1,6 +1,11 @@
-from visão.TelaLogin import TelaLogin
+from controle.ControleJogador import ControleJogador
+from controle.ControlePartida import ControlePartida
+from controle.ControleTime import ControleTime
 
-if __name__ == "__main__":
-    tela_login = TelaLogin()
-    tela_login.run()
+from modelo.Jogador import Jogador
+from modelo.Partida import Partida
+from modelo.Time import Time
 
+from visão.VisaoJogador import VisaoJogador
+from visão.VisaoPartida import VisaoPartida
+from visão.VisaoTime import VisaoTime
