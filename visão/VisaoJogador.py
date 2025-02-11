@@ -5,98 +5,79 @@ import sys
 import os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from controle.ControleJogador import ControleJogador
 from modelo.Jogador import Jogador
+from controle.ControleJogador import ControleJogador
 
 class VisaoJogador:
+    def __init__(self, master):
+        self.master = master
+        self.master.title("Cadastro de Jogadores")
+        
+        self.controle = ControleJogador()
 
-    def __init__(self, root):
-        self.root = root
-        self.root.title("Gerenciador de Jogadores")
-        self.jogadores = []  # Lista para armazenar os jogadores
+        # Criando os campos de entrada
+        self.label_nome = tk.Label(master, text="Nome:")
+        self.label_nome.grid(row=0, column=0)
+        self.entry_nome = tk.Entry(master)
+        self.entry_nome.grid(row=0, column=1)
 
-        # Tela inicial
-        self.tela_inicial()
+        self.label_numero = tk.Label(master, text="Número:")
+        self.label_numero.grid(row=1, column=0)
+        self.entry_numero = tk.Entry(master)
+        self.entry_numero.grid(row=1, column=1)
 
-    def tela_inicial(self):
-        """Cria a tela inicial com botões para adicionar e remover jogadores."""
-        self.limpar_tela()
-
-        tk.Label(self.root, text="Gerenciador de Jogadores", font=("Arial", 16)).pack(pady=20)
-
-        tk.Button(self.root, text="Adicionar Jogador", command=self.tela_adicionar_jogador, width=20).pack(pady=10)
-        tk.Button(self.root, text="Remover Jogador", command=self.tela_remover_jogador, width=20).pack(pady=10)
-
-    def tela_adicionar_jogador(self):
-        """Cria a tela para adicionar um jogador."""
-        self.limpar_tela()
-
-        tk.Label(self.root, text="Adicionar Jogador", font=("Arial", 14)).pack(pady=10)
-
-        # Campos de entrada
-        tk.Label(self.root, text="Nome:").pack()
-        self.nome_entry = tk.Entry(self.root)
-        self.nome_entry.pack(pady=5)
-
-        tk.Label(self.root, text="Número:").pack()
-        self.numero_entry = tk.Entry(self.root)
-        self.numero_entry.pack(pady=5)
-
-        tk.Label(self.root, text="Posição:").pack()
-        self.posicao_entry = tk.Entry(self.root)
-        self.posicao_entry.pack(pady=5)
+        self.label_posicao = tk.Label(master, text="Posição:")
+        self.label_posicao.grid(row=2, column=0)
+        self.entry_posicao = tk.Entry(master)
+        self.entry_posicao.grid(row=2, column=1)
 
         # Botões
-        tk.Button(self.root, text="Salvar", command=self.adicionar_jogador).pack(pady=10)
-        tk.Button(self.root, text="Voltar", command=self.tela_inicial).pack(pady=5)
+        self.botao_cadastrar = tk.Button(master, text="Cadastrar", command=self.cadastrar_jogador)
+        self.botao_cadastrar.grid(row=3, column=0)
 
-    def tela_remover_jogador(self):
-        """Cria a tela para remover um jogador."""
-        self.limpar_tela()
+        self.botao_excluir = tk.Button(master, text="Excluir", command=self.excluir_jogador)
+        self.botao_excluir.grid(row=3, column=1)
 
-        tk.Label(self.root, text="Remover Jogador", font=("Arial", 14)).pack(pady=10)
-
-        if not self.jogadores:
-            tk.Label(self.root, text="Nenhum jogador cadastrado.").pack()
-            tk.Button(self.root, text="Voltar", command=self.tela_inicial).pack(pady=10)
-            return
+        self.botao_carregar = tk.Button(master, text="Carregar Jogadores", command=self.carregar_jogadores)
+        self.botao_carregar.grid(row=4, column=0)
 
         # Lista de jogadores
-        self.listbox = tk.Listbox(self.root)
-        self.listbox.pack(pady=10, fill=tk.BOTH, expand=True)
+        self.lista_jogadores = tk.Listbox(master)
+        self.lista_jogadores.grid(row=5, column=0, columnspan=2, sticky="nsew")
 
-        for jogador in self.jogadores:
-            self.listbox.insert(tk.END, f"{jogador['nome']} - {jogador['numero']} - {jogador['posicao']}")
+    def cadastrar_jogador(self):
+        nome = self.entry_nome.get()
+        numero = self.entry_numero.get()
+        posicao = self.entry_posicao.get()
 
-        # Botão para remover
-        tk.Button(self.root, text="Remover Selecionado", command=self.remover_jogador).pack(pady=10)
-        tk.Button(self.root, text="Voltar", command=self.tela_inicial).pack(pady=5)
+        if nome and numero and posicao:
+            jogador = Jogador(nome, int(numero), posicao)
+            jogadores = self.controle.carregar_jogadores()
+            jogadores.append(jogador)
+            self.controle.salvar_jogadores(jogadores)
+            self.atualizar_lista()
+            messagebox.showinfo("Sucesso", "Jogador cadastrado com sucesso!")
+        else:
+            messagebox.showwarning("Campos vazios", "Por favor, preencha todos os campos.")
 
-    @staticmethod
-    def adicionar_jogador(self):
-        nome = self.nome_entry.get()
-        numero = self.numero_entry.get()
-        posicao = self.posicao_entry.get()
-        jogador = Jogador(nome, numero, posicao)
-        jogadores = ControleJogador.carregar_jogadores()
-        jogadores.append(jogador)
-        ControleJogador.salvar_jogadores(jogadores)
-        messagebox.showinfo("Sucesso", "Jogador adicionado com sucesso!")
-        self.tela_inicial()
-    
-    @staticmethod
-    def remover_jogador(nome):
-        jogadores = [j for j in ControleJogador.carregar_jogadores() if j.nome != nome]
-        ControleJogador.salvar_jogadores(jogadores)
+    def excluir_jogador(self):
+        selecionado = self.lista_jogadores.curselection()
+        if selecionado:
+            jogador_selecionado = self.lista_jogadores.get(selecionado)
+            nome_jogador = jogador_selecionado.split(" ")[0]
+            jogadores = self.controle.carregar_jogadores()
+            jogadores = [j for j in jogadores if j.nome != nome_jogador]
+            self.controle.salvar_jogadores(jogadores)
+            self.atualizar_lista()
+            messagebox.showinfo("Sucesso", f"Jogador {nome_jogador} excluído com sucesso!")
+        else:
+            messagebox.showwarning("Seleção inválida", "Por favor, selecione um jogador para excluir.")
 
-    def limpar_tela(self):
-        """Limpa todos os widgets da tela."""
-        for widget in self.root.winfo_children():
-            widget.destroy()
+    def carregar_jogadores(self):
+        self.atualizar_lista()
 
-
-# Inicialização da aplicação
-if __name__ == "__main__":
-    root = tk.Tk()
-    app = VisaoJogador(root)
-    root.mainloop()
+    def atualizar_lista(self):
+        self.lista_jogadores.delete(0, tk.END)
+        jogadores = self.controle.carregar_jogadores()
+        for jogador in jogadores:
+            self.lista_jogadores.insert(tk.END, f"{jogador.nome} ({jogador.posicao}) - #{jogador.numero}")

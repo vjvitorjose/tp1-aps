@@ -8,5 +8,16 @@
         "nome": "flamengo",
         "jogadores": [],
         "pontuacao": 0
+    },
+    {
+        "nome": "gremio",
+        "jogadores": [
+            {
+                "nome": "Jogador Fict\u00edcio",
+                "numero": 99,
+                "posicao": "Meio-campo"
+            }
+        ],
+        "pontuacao": 0
     }
 ]

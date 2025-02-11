@@ -1,11 +1,8 @@
-import sys
-import os
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+import json
 from modelo.Time import Time
 
-import json
-
 class ControleTime:
+    
     @staticmethod
     def salvar_times(times, arquivo="times.json"):
         with open(arquivo, "w") as f:
@@ -13,6 +10,9 @@ class ControleTime:
     
     @staticmethod
     def carregar_times(arquivo="times.json"):
-        with open(arquivo, "r") as f:
-            data = json.load(f)
-        return [Time.from_dict(t) for t in data]
+        try:
+            with open(arquivo, "r") as f:
+                data = json.load(f)
+            return [Time.from_dict(t) for t in data]
+        except FileNotFoundError:
+            return []  # Caso o arquivo não exista ainda

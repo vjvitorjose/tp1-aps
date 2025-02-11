@@ -1,0 +1,16 @@
+[
+    {
+        "time_casa": {
+            "nome": "galo",
+            "jogadores": [],
+            "pontuacao": 0
+        },
+        "time_visitante": {
+            "nome": "flamengo",
+            "jogadores": [],
+            "pontuacao": 0
+        },
+        "gols_casa": 3,
+        "gols_visitante": 1
+    }
+]
